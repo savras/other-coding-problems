@@ -75,6 +75,34 @@ void quicksort(const int& start, const int& end, string& str) {
 	}	
 }
 
+// Assume all small letters for now.
+bool countingSortAreAnagrams(string str1, string str2) {	
+
+	int size = str1.length();
+
+	if (size != str2.length()) {
+		return false;
+	}
+
+	int bucket[26] = { 0 };
+
+	bool result = true;
+	for (size_t i = 0; i < size; i++) {
+		int index = str1[i] - 'a';
+		bucket[index]++;
+	}
+
+	for (size_t i = 0; i < size; i++) {
+		int index = str1[i] - 'a';
+		bucket[index]--;
+		if (bucket[index] < 0) {
+			result = false;
+			break;
+		}
+	}
+	return result;
+}
+
 bool quicksortAreAnagrams(string str1, string str2) {
 	int size = str1.length();
 
@@ -98,7 +126,8 @@ bool quicksortAreAnagrams(string str1, string str2) {
 int main() {
 	string string1, string2;
 	cin >> string1 >> string2;
-	bool areAnagrams = quicksortAreAnagrams(string1, string2);
+	//bool areAnagrams = quicksortAreAnagrams(string1, string2);
+	bool areAnagrams = countingSortAreAnagrams(string1, string2);
 
 	if (areAnagrams) {
 		cout << "Strings are anagrams." << endl;
