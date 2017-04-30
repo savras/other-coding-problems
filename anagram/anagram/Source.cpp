@@ -6,60 +6,72 @@
  */
 #include<iostream>
 #include<string>
+#include<vector>
 #include<unordered_set>
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
+using std::vector;
 using std::unordered_set;
 
-void swap(string& str, const int& pos1, const int& pos2) {
-	char temp = str[pos1];
-	str[pos2] = str[pos1];
-	str[pos1] = temp;
+void swap(vector<char>& arr, const int& pos1, const int& pos2) {
+	char temp = arr[pos1];
+	arr[pos1] = arr[pos2];
+	arr[pos2] = temp;
 }
 
 // 3-way partition
-void partition(const int& start, const int& end, const int& pivot, string str) {
+void partition(const int& start, const int& end, int& newEnd, int& newStart, string& str) {
+	if (start < end) {
+		vector<char> arr(str.begin(), str.end());
 
-	int sPivot = pivot;
-	int ePivot = pivot;
-	// from pivot + 1 to end
-	for (size_t i = ePivot + 1; i <= end; i++) {
-		if (str[i] < str[ePivot]) {
-			swap(str, ePivot + 1, i);
-			swap(str, sPivot, ePivot + 1);
-			sPivot++;
-			ePivot++;
-		} else if (str[i] == str[ePivot]) {
-			swap(str, ePivot + 1, i);
-			ePivot++;
-		}
-	}
+		int equalPointer = start;
+		int lessThanPointer = start;
 
-	// from pivot - 1 to start
-	for (int i = sPivot - 1; i >= start; i--) {
-		if (str[i] > str[sPivot]) {
-			swap(str, sPivot - 1, i);
-			swap(str, ePivot, sPivot - 1);
-			sPivot--;
-			ePivot++;
-		} else if (str[i] == str[ePivot]) {
-			swap(str, sPivot - 1, i);
-			sPivot--;
+		swap(arr, start, newEnd);
+
+		for (size_t i = start + 1; i <= end; i++) {
+			if (arr[i] < arr[start]) {
+				swap(arr, i, lessThanPointer + 1);
+				lessThanPointer++;
+			}
+			else if (arr[i] == arr[start]) {
+				swap(arr, equalPointer + 1, i);
+				swap(arr, lessThanPointer + 1, i);
+				equalPointer++;
+				lessThanPointer++;
+			}
 		}
-	}
+
+		// Copy partitioned contents in temp array back to str.
+		int counter = start;
+		for (size_t i = equalPointer + 1; i <= lessThanPointer; i++) {
+			str[counter++] = arr[i];
+		}
+
+		newEnd = counter - 1;
+		for (size_t i = start; i <= equalPointer; i++) {
+			str[counter++] = arr[i];
+		}
+
+		newStart = counter;
+		for (size_t i = lessThanPointer + 1; i <= end; i++) {
+			str[counter++] = arr[i];
+		}
+	}	
 }
 
 void quicksort(const int& start, const int& end, string& str) {
 	if (start < end) {
-		int pivot = start + ((end - start) / 2);
+		int newEnd = start + ((end - start) / 2);
+		int newStart = newEnd;
 
-		partition(start, end, pivot, str);
+		partition(start, end, newEnd, newStart, str);
 
-		quicksort(start, pivot - 1, str);
-		quicksort(start, pivot + 1, str);
+		quicksort(start, newEnd, str);
+		quicksort(newStart, end,  str);
 	}	
 }
 
@@ -71,8 +83,8 @@ bool quicksortAreAnagrams(string str1, string str2) {
 	}
 
 	bool result = true;
-	quicksort(0, size, str1);
-	quicksort(0, size, str2);
+	quicksort(0, size - 1, str1);
+	quicksort(0, size - 1, str2);
 
 	for (size_t i = 0; i < size; i++) {
 		if (str1[i] != str2[i]) {
@@ -86,5 +98,12 @@ bool quicksortAreAnagrams(string str1, string str2) {
 int main() {
 	string string1, string2;
 	cin >> string1 >> string2;
-	cout << "String is anagram: " << quicksortAreAnagrams(string1, string2) << endl;
+	bool areAnagrams = quicksortAreAnagrams(string1, string2);
+
+	if (areAnagrams) {
+		cout << "Strings are anagrams." << endl;
+	}
+	else {
+		cout << "Strings are not anagrams." << endl;
+	}
 }
