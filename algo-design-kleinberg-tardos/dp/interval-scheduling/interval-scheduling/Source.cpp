@@ -37,17 +37,18 @@ int getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(const vec
 }
 
 int solveRecursive(const vector<pair<int, int>>& intervals, int index) {
-	int value = 0;
 	if (index == 0) {
-		value =  1;
+		return 1;
 	}
 
 	int previousOptIfCurrentIsPartOfOpt = getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(intervals, index);
 	if (previousOptIfCurrentIsPartOfOpt >= 0) {
-		int value = max(value + solveRecursive(intervals, previousOptIfCurrentIsPartOfOpt), solveRecursive(intervals, index - 1));
+		 int value = max(1 + solveRecursive(intervals, previousOptIfCurrentIsPartOfOpt), solveRecursive(intervals, index - 1));
+		 return value;
 	}
-	
-	return value;
+	else {
+		return 1;
+	}	
 }
 
 // Random test input ordered by end time asc:
