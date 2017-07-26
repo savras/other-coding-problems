@@ -12,13 +12,64 @@
  * OPT(j - 1): the optimal solution without interval at j
  */
 #include<iostream>
+#include<utility>
+#include<algorithm>
+#include<vector>
 
 using std::endl;
 using std::cin;
 using std::cout;
+using std::pair;
+using std::vector;
+using std::max;
 
+int getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(const vector<pair<int, int>>& intervals, int currentIndex) {
+	int result = -1;
+	int currentStartValue = intervals[currentIndex].first;
+
+	for (int i = currentIndex - 1; i >= 0; i--) {
+		if (currentStartValue >= intervals[i].second) {
+			result = i;
+			break;
+		}
+	}
+	return result;
+}
+
+int solveRecursive(const vector<pair<int, int>>& intervals, int index) {
+	int value = 0;
+	if (index == 0) {
+		value =  1;
+	}
+
+	int previousOptIfCurrentIsPartOfOpt = getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(intervals, index);
+	if (previousOptIfCurrentIsPartOfOpt >= 0) {
+		int value = max(value + solveRecursive(intervals, previousOptIfCurrentIsPartOfOpt), solveRecursive(intervals, index - 1));
+	}
+	
+	return value;
+}
+
+// Random test input ordered by end time asc:
+// 1		-- t	: No. of test cases
+// 1 4		-- s e	: Start and end time respectively
+// 2 5
+// 4 7
+// 3 8
+// 6 9
+// 7 9
 int main() {
+	int size = 6;
+	vector<pair<int, int>> intervals({
+		pair<int, int>(1, 4),
+		pair<int, int>(2, 5),
+		pair<int, int>(4, 7),
+		pair<int, int>(3, 8),
+		pair<int, int>(6, 9),
+		pair<int, int>(7, 9),
+	});
 
+	solveRecursive(intervals, 6);
 
 	return 1;
 }
