@@ -60,7 +60,7 @@ int solveRecursive(const vector<pair<int, int>>& intervals, int index) {
 // 6 9
 // 7 9
 int main() {
-	int size = 6;
+	int size = 5;
 	vector<pair<int, int>> intervals({
 		pair<int, int>(1, 4),
 		pair<int, int>(2, 5),
@@ -70,7 +70,7 @@ int main() {
 		pair<int, int>(7, 9),
 	});
 
-	solveRecursive(intervals, 6);
+	cout << solveRecursive(intervals, size) << endl;;
 
 	return 1;
 }
