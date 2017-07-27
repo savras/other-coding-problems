@@ -36,19 +36,31 @@ int getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(const vec
 	return result;
 }
 
-int solveRecursive(const vector<pair<int, int>>& intervals, int index) {
+int solveRecursive(const vector<pair<int, int>>& intervals, int index, vector<int>& memo) {
 	if (index == 0) {
 		return 1;
 	}
 
+	// index is part of optimal solution
 	int previousOptIfCurrentIsPartOfOpt = getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(intervals, index);
 	if (previousOptIfCurrentIsPartOfOpt >= 0) {
-		 int value = max(1 + solveRecursive(intervals, previousOptIfCurrentIsPartOfOpt), solveRecursive(intervals, index - 1));
-		 return value;
+		if (memo[index] == 0) {
+			int optIncludesCurrent = 1 + solveRecursive(intervals, previousOptIfCurrentIsPartOfOpt, memo);
+			memo[index] = optIncludesCurrent;
+		}
 	}
 	else {
-		return 1;
-	}	
+		memo[index] = 1;
+	}
+
+	// index is not part of optimal solution
+	if (memo[index - 1] == 0) {
+		int optExcludesCurrent = solveRecursive(intervals, index - 1, memo);
+		memo[index - 1] = optExcludesCurrent;
+	}
+
+	int value = max(memo[index], memo[index - 1]);
+	return value;
 }
 
 // Random test input ordered by end time asc:
@@ -59,8 +71,7 @@ int solveRecursive(const vector<pair<int, int>>& intervals, int index) {
 // 3 8
 // 6 9
 // 7 9
-int main() {
-	int size = 5;
+int main() {	
 	vector<pair<int, int>> intervals({
 		pair<int, int>(1, 4),
 		pair<int, int>(2, 5),
@@ -68,9 +79,13 @@ int main() {
 		pair<int, int>(3, 8),
 		pair<int, int>(6, 9),
 		pair<int, int>(7, 9),
+		pair<int, int>(8, 10),
 	});
+	int size = intervals.size();
 
-	cout << solveRecursive(intervals, size) << endl;;
+	const int arrayOffset = 1;
+	vector<int> memo(size);
+	cout << solveRecursive(intervals, size - arrayOffset, memo) << endl;;
 
 	return 1;
 }
