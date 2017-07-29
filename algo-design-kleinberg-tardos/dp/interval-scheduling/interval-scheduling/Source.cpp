@@ -63,8 +63,18 @@ int solveRecursive(const vector<pair<int, int>>& intervals, int index, vector<in
 	return value;
 }
 
-int solveDp(const vector<pair<int, int>>& intervals) {
+int solveDp(const vector<pair<int, int>>& intervals, const int& size) {
+	vector<int> dp(size);
+	
+	dp[0] = 1;	// Can easily grap the value of intervals[0] if we want to use the weight instead.
+	for (size_t i = 1; i < size; i++) {
+		int previousOptIfCurrentIsPartOfOpt = getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(intervals, i);
+		previousOptIfCurrentIsPartOfOpt = previousOptIfCurrentIsPartOfOpt == -1 ? 0 : previousOptIfCurrentIsPartOfOpt;
+		int value = max(1 + dp[previousOptIfCurrentIsPartOfOpt], dp[i - 1]);
+		dp[i] = value;
+	}
 
+	return dp[size - 1];
 }
 
 // Random test input ordered by end time asc:
@@ -91,7 +101,7 @@ int main() {
 	const int arrayOffset = 1;
 	vector<int> memo(size);
 	//cout << solveRecursive(intervals, size - arrayOffset, memo) << endl;;
-	cout << solveDp(intervals) << endl;;
+	cout << solveDp(intervals, size) << endl;;
 
 	return 1;
 }
