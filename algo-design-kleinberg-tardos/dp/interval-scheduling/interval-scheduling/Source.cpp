@@ -23,6 +23,10 @@ using std::pair;
 using std::vector;
 using std::max;
 
+// Doesn't work for intervals with different weights because its not guaranteed that 
+// the largest (non-overlapping) indexed interval before currrent will give max.
+// The optimal selection might be the earlier interval. In this case better to start from i = 0 to m, where m is the latest interval
+// that doesn't overlap.
 int getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(const vector<pair<int, int>>& intervals, int currentIndex) {
 	int result = -1;
 	int currentStartValue = intervals[currentIndex].first;
