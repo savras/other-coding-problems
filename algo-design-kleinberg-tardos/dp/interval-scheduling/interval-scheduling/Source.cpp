@@ -23,10 +23,9 @@ using std::pair;
 using std::vector;
 using std::max;
 
-// Doesn't work for intervals with different weights because its not guaranteed that 
-// the largest (non-overlapping) indexed interval before currrent will give max.
-// The optimal selection might be the earlier interval. In this case better to start from i = 0 to m, where m is the latest interval
-// that doesn't overlap.
+// Key note: We include the optimal solution for p(n), where p(n) is the largest index before element n where 
+// its end time does not overlap with n's start time. We are guaranteed that the solution is optimal because
+// we would have calculated it from the base case.
 int getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(const vector<pair<int, int>>& intervals, int currentIndex) {
 	int result = -1;
 	int currentStartValue = intervals[currentIndex].first;
@@ -71,9 +70,10 @@ int solveDp(const vector<pair<int, int>>& intervals, const int& size) {
 	vector<int> dp(size);
 	
 	dp[0] = 1;	// Can easily grap the value of intervals[0] if we want to use the weight instead.
-	for (size_t i = 1; i < size; i++) {
+	for (size_t i = 1; i < size; i++) {		
 		int previousOptIfCurrentIsPartOfOpt = getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(intervals, i);
 		previousOptIfCurrentIsPartOfOpt = previousOptIfCurrentIsPartOfOpt == -1 ? 0 : previousOptIfCurrentIsPartOfOpt;
+
 		int value = max(1 + dp[previousOptIfCurrentIsPartOfOpt], dp[i - 1]);
 		dp[i] = value;
 	}
