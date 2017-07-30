@@ -45,6 +45,7 @@ int solveRecursive(const vector<pair<int, int>>& intervals, int index, vector<in
 	}
 
 	// index is part of optimal solution
+	// Get the optimal solution for the closest previous interval that doesn't overlap, and add current interval's value to it.
 	int previousOptIfCurrentIsPartOfOpt = getOptForLargestIndexOfIntervalEndTimeBeforeStartOfCurrentInterval(intervals, index);
 	if (previousOptIfCurrentIsPartOfOpt >= 0) {
 		if (memo[index] == 0) {
@@ -53,6 +54,7 @@ int solveRecursive(const vector<pair<int, int>>& intervals, int index, vector<in
 		}
 	}
 	else {
+		// There is no optimal solution for the interval before current that doesn't overlap (i.e. this is the first interval)
 		memo[index] = 1;
 	}
 
