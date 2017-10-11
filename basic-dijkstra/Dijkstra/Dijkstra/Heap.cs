@@ -4,7 +4,7 @@ namespace Dijkstra
 {
     public class Heap<T> where T : Entity
     {
-        private List<T> _heap;
+        private readonly List<T> _heap;
 
         public Heap()
         {
@@ -13,7 +13,27 @@ namespace Dijkstra
 
         public T ExtractMin()
         {
-            return null;
+            var currentIndex = 0;
+            var min = _heap[currentIndex];
+
+            // sieve-down
+            var leftChildIndex = GetLeftChildIndex(currentIndex);
+            var rightChildIndex = GetRightChildIndex(currentIndex);
+
+            var smallerChildIndex = _heap[leftChildIndex].Id > _heap[rightChildIndex].Id ? rightChildIndex : leftChildIndex;
+
+            while (leftChildIndex < _heap.Count && rightChildIndex < _heap.Count && min.Id < _heap[smallerChildIndex].Id)
+            {
+                var temp = _heap[currentIndex];
+                _heap[currentIndex] = _heap[smallerChildIndex];
+                _heap[smallerChildIndex] = temp;
+
+                leftChildIndex = GetLeftChildIndex(smallerChildIndex);
+                rightChildIndex = GetRightChildIndex(smallerChildIndex);
+                smallerChildIndex = _heap[leftChildIndex].Id > _heap[rightChildIndex].Id ? rightChildIndex : leftChildIndex;
+            }
+
+            return min;
         }
 
         public void Insert(T item)
@@ -44,16 +64,14 @@ namespace Dijkstra
             return (index - 1) / 2;
         }
 
-        private T GetRightChild(int index)
+        private int GetRightChildIndex(int index)
         {
-            var rightIndex = (2 * index) + 2;
-            return _heap[rightIndex];
+            return (2 * index) + 2;
         }
 
-        private T GetLeftChild(int index)
+        private int GetLeftChildIndex(int index)
         {
-            var leftIndex = (2*index) + 1;
-            return _heap[leftIndex];
+            return (2 * index) + 1;
         }
     }
 }
