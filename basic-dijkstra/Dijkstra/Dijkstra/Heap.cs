@@ -5,7 +5,7 @@ namespace Dijkstra
     public class Heap<T> where T : Entity
     {
         private readonly List<T> _heap;
-
+        
         public Heap()
         {
             _heap = new List<T>();
@@ -16,13 +16,21 @@ namespace Dijkstra
             var currentIndex = 0;
             var min = _heap[currentIndex];
 
+            // replace root with last child
+            _heap[currentIndex] = _heap[_heap.Count - 1];
+            _heap.RemoveAt(_heap.Count - 1);
+
             // sieve-down
             var leftChildIndex = GetLeftChildIndex(currentIndex);
             var rightChildIndex = GetRightChildIndex(currentIndex);
 
-            var smallerChildIndex = _heap[leftChildIndex].Id > _heap[rightChildIndex].Id ? rightChildIndex : leftChildIndex;
+            int smallerChildIndex = 0;
+            if (leftChildIndex < _heap.Count && rightChildIndex < _heap.Count)
+            {
+                smallerChildIndex = _heap[leftChildIndex].Id > _heap[rightChildIndex].Id ? rightChildIndex : leftChildIndex;
+            }
 
-            while (leftChildIndex < _heap.Count && rightChildIndex < _heap.Count && min.Id < _heap[smallerChildIndex].Id)
+            while (leftChildIndex < _heap.Count && rightChildIndex < _heap.Count && _heap[currentIndex].Id > _heap[smallerChildIndex].Id)
             {
                 var temp = _heap[currentIndex];
                 _heap[currentIndex] = _heap[smallerChildIndex];
@@ -30,7 +38,12 @@ namespace Dijkstra
 
                 leftChildIndex = GetLeftChildIndex(smallerChildIndex);
                 rightChildIndex = GetRightChildIndex(smallerChildIndex);
-                smallerChildIndex = _heap[leftChildIndex].Id > _heap[rightChildIndex].Id ? rightChildIndex : leftChildIndex;
+                currentIndex = smallerChildIndex;
+
+                if (leftChildIndex < _heap.Count && rightChildIndex < _heap.Count)
+                {
+                    smallerChildIndex = _heap[leftChildIndex].Id > _heap[rightChildIndex].Id ? rightChildIndex : leftChildIndex;
+                }
             }
 
             return min;
@@ -43,7 +56,7 @@ namespace Dijkstra
             // sieve-up
             var currentIndex = _heap.Count - 1;
             var parentIndex = GetParentIndex(currentIndex);
-            while (parentIndex >= 0 && _heap[currentIndex].Id > _heap[parentIndex].Id)
+            while (parentIndex >= 0 && _heap[currentIndex].Id < _heap[parentIndex].Id)
             {
                 var temp = _heap[parentIndex];
                 _heap[parentIndex] = _heap[currentIndex];
