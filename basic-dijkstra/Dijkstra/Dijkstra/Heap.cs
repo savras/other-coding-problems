@@ -24,7 +24,7 @@ namespace Dijkstra
             var leftChildIndex = GetLeftChildIndex(currentIndex);
             var rightChildIndex = GetRightChildIndex(currentIndex);
 
-            var smallerChildIndex = SetSmallerChild(currentIndex, leftChildIndex, rightChildIndex);
+            var smallerChildIndex = GetSmallerChild(currentIndex, leftChildIndex, rightChildIndex);
 
             while (currentIndex != smallerChildIndex)
             {
@@ -36,13 +36,13 @@ namespace Dijkstra
                 rightChildIndex = GetRightChildIndex(smallerChildIndex);
                 currentIndex = smallerChildIndex;
 
-                smallerChildIndex = SetSmallerChild(currentIndex, leftChildIndex, rightChildIndex);
+                smallerChildIndex = GetSmallerChild(currentIndex, leftChildIndex, rightChildIndex);
             }
 
             return min;
         }
 
-        private int SetSmallerChild(int currentIndex, int leftChildIndex, int rightChildIndex)
+        private int GetSmallerChild(int currentIndex, int leftChildIndex, int rightChildIndex)
         {
             var smallerChildIndex = currentIndex;
             if (leftChildIndex < _heap.Count)
