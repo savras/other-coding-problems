@@ -24,13 +24,9 @@ namespace Dijkstra
             var leftChildIndex = GetLeftChildIndex(currentIndex);
             var rightChildIndex = GetRightChildIndex(currentIndex);
 
-            int smallerChildIndex = 0;
-            if (leftChildIndex < _heap.Count && rightChildIndex < _heap.Count)
-            {
-                smallerChildIndex = _heap[leftChildIndex].Id > _heap[rightChildIndex].Id ? rightChildIndex : leftChildIndex;
-            }
+            var smallerChildIndex = SetSmallerChild(currentIndex, leftChildIndex, rightChildIndex);
 
-            while (leftChildIndex < _heap.Count && rightChildIndex < _heap.Count && _heap[currentIndex].Id > _heap[smallerChildIndex].Id)
+            while (currentIndex != smallerChildIndex)
             {
                 var temp = _heap[currentIndex];
                 _heap[currentIndex] = _heap[smallerChildIndex];
@@ -40,13 +36,30 @@ namespace Dijkstra
                 rightChildIndex = GetRightChildIndex(smallerChildIndex);
                 currentIndex = smallerChildIndex;
 
-                if (leftChildIndex < _heap.Count && rightChildIndex < _heap.Count)
-                {
-                    smallerChildIndex = _heap[leftChildIndex].Id > _heap[rightChildIndex].Id ? rightChildIndex : leftChildIndex;
-                }
+                smallerChildIndex = SetSmallerChild(currentIndex, leftChildIndex, rightChildIndex);
             }
 
             return min;
+        }
+
+        private int SetSmallerChild(int currentIndex, int leftChildIndex, int rightChildIndex)
+        {
+            var smallerChildIndex = currentIndex;
+            if (leftChildIndex < _heap.Count)
+            {
+                if (_heap[currentIndex].Id > _heap[leftChildIndex].Id)
+                {
+                    smallerChildIndex = leftChildIndex;
+                }
+            }
+            if (rightChildIndex < _heap.Count)
+            {
+                if (_heap[currentIndex].Id > _heap[rightChildIndex].Id)
+                {
+                    smallerChildIndex = rightChildIndex;
+                }
+            }
+            return smallerChildIndex;
         }
 
         public void Insert(T item)

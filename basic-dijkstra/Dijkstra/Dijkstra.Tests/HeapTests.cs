@@ -14,13 +14,12 @@ namespace Dijkstra.Tests
             var entity3 = new Entity {Id = 3};
             var entity5 = new Entity {Id = 5};
             var entity10 = new Entity {Id = 10};
-
-
-            heap.Insert(entity1);
+            
             heap.Insert(entity3);
             heap.Insert(entity2);
             heap.Insert(entity10);
             heap.Insert(entity5);
+            heap.Insert(entity1);
 
             var min1 = heap.ExtractMin();
             Assert.True(min1.Id == entity1.Id);
