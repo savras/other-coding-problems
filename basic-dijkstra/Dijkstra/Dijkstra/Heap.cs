@@ -54,7 +54,7 @@ namespace Dijkstra
             }
             if (rightChildIndex < _heap.Count)
             {
-                if (_heap[currentIndex].Id > _heap[rightChildIndex].Id)
+                if (_heap[smallerChildIndex].Id > _heap[rightChildIndex].Id)
                 {
                     smallerChildIndex = rightChildIndex;
                 }
