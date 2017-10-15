@@ -2,7 +2,7 @@
 
 namespace Dijkstra
 {
-    public class Heap<T> where T : Entity
+    public class Heap<T> where T : Node
     {
         // Maps adjList node index to heap index
         private readonly Dictionary<int, int> _map;  // <key: node index of adjList, value: index in heap
@@ -23,8 +23,8 @@ namespace Dijkstra
 
         private void MinHeapify(int heapIndex, int value)
         {
-            var sieveUp = value > _heap[heapIndex].Id;
-            _heap[heapIndex].Id = value;
+            var sieveUp = value > _heap[heapIndex].Distance;
+            _heap[heapIndex].Distance = value;
 
             if (sieveUp)
             {
@@ -45,7 +45,7 @@ namespace Dijkstra
             _heap[currentIndex] = _heap[_heap.Count - 1];
             _heap.RemoveAt(_heap.Count - 1);
 
-            _map[_heap[currentIndex].Id] = currentIndex;
+            _map[_heap[currentIndex].Distance] = currentIndex;
 
             SieveDown(currentIndex);
 
@@ -65,8 +65,8 @@ namespace Dijkstra
                 _heap[currentIndex] = _heap[smallerChildIndex];
                 _heap[smallerChildIndex] = temp;
 
-                _map[_heap[currentIndex].Id] = currentIndex;
-                _map[_heap[smallerChildIndex].Id] = smallerChildIndex;
+                _map[_heap[currentIndex].Distance] = currentIndex;
+                _map[_heap[smallerChildIndex].Distance] = smallerChildIndex;
 
                 leftChildIndex = GetLeftChildIndex(smallerChildIndex);
                 rightChildIndex = GetRightChildIndex(smallerChildIndex);
@@ -81,14 +81,14 @@ namespace Dijkstra
             var smallerChildIndex = currentIndex;
             if (leftChildIndex < _heap.Count)
             {
-                if (_heap[currentIndex].Id > _heap[leftChildIndex].Id)
+                if (_heap[currentIndex].Distance > _heap[leftChildIndex].Distance)
                 {
                     smallerChildIndex = leftChildIndex;
                 }
             }
             if (rightChildIndex < _heap.Count)
             {
-                if (_heap[smallerChildIndex].Id > _heap[rightChildIndex].Id)
+                if (_heap[smallerChildIndex].Distance > _heap[rightChildIndex].Distance)
                 {
                     smallerChildIndex = rightChildIndex;
                 }
@@ -100,7 +100,7 @@ namespace Dijkstra
         {
             _heap.Add(item);
             var currentIndex = _heap.Count - 1;
-            _map.Add(item.Id, currentIndex);
+            _map.Add(item.Distance, currentIndex);
 
             SieveUp(currentIndex);
         }
@@ -108,14 +108,14 @@ namespace Dijkstra
         private void SieveUp(int currentIndex)
         {
             var parentIndex = GetParentIndex(currentIndex);
-            while (parentIndex >= 0 && _heap[currentIndex].Id < _heap[parentIndex].Id)
+            while (parentIndex >= 0 && _heap[currentIndex].Distance < _heap[parentIndex].Distance)
             {
                 var temp = _heap[parentIndex];
                 _heap[parentIndex] = _heap[currentIndex];
                 _heap[currentIndex] = temp;
 
-                _map[_heap[currentIndex].Id] = currentIndex;
-                _map[_heap[parentIndex].Id] = parentIndex;
+                _map[_heap[currentIndex].Distance] = currentIndex;
+                _map[_heap[parentIndex].Distance] = parentIndex;
 
                 currentIndex = parentIndex;
                 parentIndex = GetParentIndex(parentIndex);
