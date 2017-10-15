@@ -34,6 +34,8 @@ namespace Dijkstra
                         Distance = _distance[currentNode][i] + _spt[currentNode]
                     };
 
+                    // No need to update priority. 
+                    // Just push a duplicate copy: http://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-using-priority_queue-stl/
                     _heap.Insert(node);
                 }
 

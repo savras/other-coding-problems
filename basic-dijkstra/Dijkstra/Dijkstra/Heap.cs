@@ -15,7 +15,7 @@ namespace Dijkstra
             _heap = new List<T>();
         }
 
-        public void Replace(int nodeIndex, int value)
+        public void ReplacePriority(int nodeIndex, int value)
         {
             var heapIndex = _map[nodeIndex];
             MinHeapify(heapIndex, value);
