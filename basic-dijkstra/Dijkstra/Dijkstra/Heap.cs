@@ -4,11 +4,36 @@ namespace Dijkstra
 {
     public class Heap<T> where T : Entity
     {
+        // Maps adjList node index to heap index
+        private readonly Dictionary<int, int> _map;  // <key: node index of adjList, value: index in heap
+
         private readonly List<T> _heap;
         
         public Heap()
         {
+            _map = new Dictionary<int, int>();
             _heap = new List<T>();
+        }
+
+        public void Replace(int nodeIndex, int value)
+        {
+            var heapIndex = _map[nodeIndex];
+            MinHeapify(heapIndex, value);
+        }
+
+        private void MinHeapify(int heapIndex, int value)
+        {
+            var sieveUp = value > _heap[heapIndex].Id;
+            _heap[heapIndex].Id = value;
+
+            if (sieveUp)
+            {
+                SieveUp(heapIndex);
+            }
+            else
+            {
+                SieveDown(heapIndex);
+            }
         }
 
         public T ExtractMin()
@@ -20,7 +45,15 @@ namespace Dijkstra
             _heap[currentIndex] = _heap[_heap.Count - 1];
             _heap.RemoveAt(_heap.Count - 1);
 
-            // sieve-down
+            _map[_heap[currentIndex].Id] = currentIndex;
+
+            SieveDown(currentIndex);
+
+            return min;
+        }
+
+        private void SieveDown(int currentIndex)
+        {
             var leftChildIndex = GetLeftChildIndex(currentIndex);
             var rightChildIndex = GetRightChildIndex(currentIndex);
 
@@ -32,14 +65,15 @@ namespace Dijkstra
                 _heap[currentIndex] = _heap[smallerChildIndex];
                 _heap[smallerChildIndex] = temp;
 
+                _map[_heap[currentIndex].Id] = currentIndex;
+                _map[_heap[smallerChildIndex].Id] = smallerChildIndex;
+
                 leftChildIndex = GetLeftChildIndex(smallerChildIndex);
                 rightChildIndex = GetRightChildIndex(smallerChildIndex);
                 currentIndex = smallerChildIndex;
 
                 smallerChildIndex = GetSmallerChild(currentIndex, leftChildIndex, rightChildIndex);
             }
-
-            return min;
         }
 
         private int GetSmallerChild(int currentIndex, int leftChildIndex, int rightChildIndex)
@@ -65,15 +99,23 @@ namespace Dijkstra
         public void Insert(T item)
         {
             _heap.Add(item);
-
-            // sieve-up
             var currentIndex = _heap.Count - 1;
+            _map.Add(item.Id, currentIndex);
+
+            SieveUp(currentIndex);
+        }
+
+        private void SieveUp(int currentIndex)
+        {
             var parentIndex = GetParentIndex(currentIndex);
             while (parentIndex >= 0 && _heap[currentIndex].Id < _heap[parentIndex].Id)
             {
                 var temp = _heap[parentIndex];
                 _heap[parentIndex] = _heap[currentIndex];
                 _heap[currentIndex] = temp;
+
+                _map[_heap[currentIndex].Id] = currentIndex;
+                _map[_heap[parentIndex].Id] = parentIndex;
 
                 currentIndex = parentIndex;
                 parentIndex = GetParentIndex(parentIndex);
