@@ -5,30 +5,38 @@ namespace Q2MakeChange
 {
     class Program
     {
-        public static int MakeChange(int n)
+        private static readonly List<int> Denominations = new List<int> { 10, 6, 1 };
+        public static int MakeChange(int n, int[] cache)
         {
-            if (n <= 0)
+            if (cache[n] >= 0)
             {
-                return 0;
+                return cache[n];
             }
 
-            List<int> denominations = new List<int>{ 10, 6, 1 };
-
-            var result = int.MaxValue;
-            foreach (var denom in denominations)
+            cache[n] = int.MaxValue;
+            foreach (var denom in Denominations)
             {
                 if (n >= denom)
                 {
-                    result = Math.Min(result, 1 + MakeChange(n - denom));
+                    cache[n] = Math.Min(cache[n], 1 + MakeChange(n - denom, cache));
                 }
             }
 
-            return result;
+            return cache[n];
         }
 
         static void Main(string[] args)
         {
-            var result = MakeChange(6);
+            var n = 10;
+            var cache = new int[n+1];
+
+            // So that cache[0] is 0, the rest are -1, and cache[0] is used as termination condition for recursion.
+            for (var i = 1; i < n + 1; i++)  
+            {
+                cache[i] = -1;
+            }
+
+            var result = MakeChange(n, cache);
             Console.WriteLine(result);
         }
     }
