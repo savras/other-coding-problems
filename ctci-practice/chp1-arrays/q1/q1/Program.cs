@@ -1,15 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace q1
 {
     class Program
     {
+        static bool IsUniqueNoDataStructure(string str)
+        {
+            var result = true;
+            var mask = 0;
+            for (var i = 0; i < str.Length; i++)
+            {
+                var ascii = i - 'a';
+                
+                var bitVal = 1 << ascii;
+                var maskResult = bitVal & mask;
+                if (maskResult > 0)
+                {
+                    result = false;
+                    break;
+                }
+                mask = mask | bitVal;
+            }
+            return result;
+        }
+
         static bool IsUnique(string str)
         {
             var result = true;
@@ -35,7 +49,8 @@ namespace q1
         static void Main(string[] args)
         {
             var str = Console.ReadLine();
-            var result = IsUnique(str);
+            //var result = IsUnique(str);
+            var result = IsUniqueNoDataStructure(str);
             Console.WriteLine(result);
         }
     }
