@@ -21,8 +21,8 @@ namespace q3
 
                 var substring = sb.ToString().Substring(j);
                 sb.Insert(i, "%20");
-                i += 2;
-                sb.Remove(i, sb.Length);
+                i += 3;
+                sb.Remove(i, sb.Length - i);
                 sb.Insert(i, substring);
 
                 i++;
