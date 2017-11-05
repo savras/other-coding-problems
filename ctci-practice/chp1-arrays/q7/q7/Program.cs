@@ -19,7 +19,7 @@ namespace q7
     {
         static void Main(string[] args)
         {
-            var n = 4;
+            var n = 3;
             var arr = new[, ]
             {
                 { 1, 2, 3, 4},
@@ -27,7 +27,6 @@ namespace q7
                 { 9, 10, 11, 12 },
                 { 13, 14, 15, 16 }
             };
-
 
             // if n %2 != 0, outer loop loops from i = 0 to i = n/2 (incl)
             // if n %2 == 0, outer loop loops from i = 0 to < n/2 -1
