@@ -1,10 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace q1
 {
     class Program
     {
+        // Bottom up
+        static int GetStepsDp(int n)
+        {
+            var a = 1;
+            var b = 2;
+            var c = 4;
+            var result = 0;
+            for (var i = 4; i <= n; i++)
+            {
+                result = a + b + c;
+                a = b;
+                b = c;
+                c = result;
+            }
+
+            return result;
+        }
 
         // Top Down
         static int GetStepsMemoize(int n, Dictionary<int, int> cache)
@@ -78,11 +96,12 @@ namespace q1
         {
             var n = int.Parse(Console.ReadLine());
 
-            var result2 = GetStepsBruteforce(n);
+            //var result = GetStepsBruteforce(n);
 
-            var cache = new Dictionary<int, int> { {1, 1}, {2, 2}, {3, 4} };
-            var result = GetStepsMemoize(n, cache);
+            //var cache = new Dictionary<int, int> { {1, 1}, {2, 2}, {3, 4} };
+            //var result = GetStepsMemoize(n, cache);
 
+            var result = GetStepsDp(n);
             Console.WriteLine(result);
         }
     }
