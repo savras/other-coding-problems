@@ -6,7 +6,9 @@ namespace Q2MakeChange
     class Program
     {
         private static readonly List<int> Denominations = new List<int> { 10, 6, 1 };
-        public static int MakeChange(int n, int[] cache)
+
+        // Memoization
+        public static int MakeChangeTopDown(int n, int[] cache)
         {
             if (cache[n] >= 0)
             {
@@ -18,14 +20,14 @@ namespace Q2MakeChange
             {
                 if (n >= denom)
                 {
-                    cache[n] = Math.Min(cache[n], 1 + MakeChange(n - denom, cache));
+                    cache[n] = Math.Min(cache[n], 1 + MakeChangeTopDown(n - denom, cache));
                 }
             }
 
             return cache[n];
         }
 
-        public static int MakeChangeTopDown(int n, int[] cache)
+        public static int MakeChangeBottomUp(int n, int[] cache)
         {
             var size = n + 1;
             for (var i = 1; i < size; i++)
@@ -58,8 +60,8 @@ namespace Q2MakeChange
                 cache[i] = -1;
             }
 
-            //var result = MakeChange(n, cache);
-            var result = MakeChangeTopDown(n, cache);
+            //var result = MakeChangeTopDown(n, cache);
+            var result = MakeChangeBottomUp(n, cache);
             Console.WriteLine(result);
         }
     }
