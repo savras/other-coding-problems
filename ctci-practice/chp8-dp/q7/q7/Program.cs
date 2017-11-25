@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace q7
 {
@@ -11,12 +7,33 @@ namespace q7
         static void Main(string[] args)
         {
             var str = Console.ReadLine();
-            PermuteUniqueString(str);
+            var chr = str.ToCharArray();
+            var len = str.Length;
+            PermuteUniqueString(chr, len, 0);
         }
 
-        private static void PermuteUniqueString(string str)
+        private static void Swap(char[] str, int i, int j)
         {
-            throw new NotImplementedException();
+            var temp = str[i];
+            str[i] = str[j];
+            str[j] = temp;
+        }
+
+        private static void PermuteUniqueString(char[] str, int len, int baseIndex)
+        {
+            if (baseIndex == len)
+            {
+                Console.WriteLine(str);
+            }
+            else
+            {
+                for (var i = baseIndex; i < len; i++)
+                {
+                    Swap(str, baseIndex, i);
+                    PermuteUniqueString(str, len, baseIndex + 1);
+                    Swap(str, baseIndex, i);
+                }
+            }
         }
     }
 }
