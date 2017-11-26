@@ -44,10 +44,63 @@ namespace q11
             else
             {
                 var cache = new Dictionary<int, int>();
-                var result = GetNumberOfWaysToRepresentNMemo(n, cache);
+                //var result = GetNumberOfWaysToRepresentNMemo(n, cache);
+                var result = GetNumberOfWaysToRepresentNDp(n);
                 Console.WriteLine(result);
             }
 
+        }
+
+        private static int GetNumberOfWaysToRepresentNDp(int n)
+        {
+            var cache = new Dictionary<int, int>();
+            cache.Add(0, 0);
+            cache.Add(5, 1);
+            cache.Add(10, 2);
+            cache.Add(25, 9);
+
+            if (n == 5)
+            {
+                return cache[5];
+            }
+            if (n == 10)
+            {
+                return cache[10];
+            }
+            if (n == 25)
+            {
+                return cache[25];
+            }
+
+            for (var i = 0; i <= n; i += 5)
+            {
+                var result = 0;
+
+                var iMinusFive = i - 5;
+                if (iMinusFive >= 0)
+                {
+                    result += cache[iMinusFive];
+                }
+
+                var iMinusTen = i - 10;
+                if (iMinusTen >= 0)
+                {
+                    result += cache[iMinusTen];
+                }
+
+                var iMinusTwentyFive = i - 25;
+                if (iMinusTwentyFive >= 0)
+                {
+                    result += cache[iMinusTwentyFive];
+                }
+
+                if (!cache.ContainsKey(i))
+                {
+                    cache.Add(i, result);
+                }
+            }
+
+            return cache[n];
         }
     }
 }
