@@ -1,66 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace q13
 {
     class Program
     {
-        static int GetMaxHeight(List<List<int>> boxes, int currentIndex, int lastPickedIndex, List<int> cache)
+        static void GetMaxHeight(List<List<int>> boxes, List<int> cache)
         {
-            if (currentIndex >= boxes.Count)
+            for (var i = 0; i < boxes.Count; i++)
             {
-                return 0;
-            }
-
-            if (cache[currentIndex] != 0)
-            {
-                return cache[currentIndex];
-            }
-
-            var result = boxes[currentIndex][0];
-            if (currentIndex == lastPickedIndex)
-            {
-                result += GetMaxHeight(boxes, currentIndex + 1, currentIndex, cache);
-            }
-            else    // currentIndex > 0 && currentIndex < boxes.Count
-            {
-                if (boxes[currentIndex][0] < boxes[lastPickedIndex][0] &&
-                    boxes[currentIndex][1] < boxes[lastPickedIndex][1] &&
-                    boxes[currentIndex][2] < boxes[lastPickedIndex][2])
+                var lastPickedIndex = i;
+                for (var j = i; j < boxes.Count; j++)
                 {
-                    result += GetMaxHeight(boxes, currentIndex + 1, currentIndex, cache);
-                }
-                else
-                {
-                    result = 0;
-                    result += GetMaxHeight(boxes, currentIndex + 1, lastPickedIndex, cache);
+                    if (i == j)
+                    {
+                        cache[i] = Math.Max(boxes[i][0], cache[i]);
+                    }
+                    else if (boxes[j][0] < boxes[lastPickedIndex][0] &&
+                             boxes[j][1] < boxes[lastPickedIndex][1] &&
+                             boxes[j][2] < boxes[lastPickedIndex][2])
+                    {
+                        cache[j] = Math.Max(boxes[j][0] + cache[lastPickedIndex], cache[j]);
+                        lastPickedIndex = j;
+                    }
                 }
             }
-
-            cache[currentIndex] = result;
-            return cache[currentIndex];
         }
 
         static void Main(string[] args)
         {
-            var boxes = new List<List<int>> { new List<int>{ 5, 5, 5 },
+            var orderedBoxes = new List<List<int>> { new List<int>{ 5, 5, 5 },
                                               new List<int>{ 4, 6, 4},
                                               new List<int>{ 3, 3, 3},
+                                              new List<int>{ 2, 5, 2},
                                             };
-            var orderedBoxes = OrderBoxesByHeight(boxes);
-            var cache = new List<int>(boxes.Count) { 0, 0, 0 };
-            for(var i = 0; i < boxes.Count; i++)
-            {
-                if (cache[i] == 0)
-                {
-                    GetMaxHeight(orderedBoxes, i, i, cache);
-                }
-            }
+
+            var cache = orderedBoxes.Select(b => 0).ToList();
+            GetMaxHeight(orderedBoxes, cache);
+            Console.WriteLine(cache[orderedBoxes.Count - 1]);
         }
 
         static List<List<int>> OrderBoxesByHeight(List<List<int>> boxes)
         {
-            return boxes ;
+            return boxes;
         }
     }
 }
