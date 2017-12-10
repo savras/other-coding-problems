@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * Scenario 1: All unique integers.
+ * Scenario 2: Nonunique integers - return earliest occurrence
+ */ 
+using System;
 
 namespace q3
 {
@@ -7,7 +11,7 @@ namespace q3
         static int FindPivot(int[] A, int low, int high)
         {
             var mid = low + ((high - low) / 2);
-            var result = mid + 1;   // Start of array is the next index
+            var result = -1;
 
             if (A[low] > A[mid])
             {
@@ -16,6 +20,10 @@ namespace q3
             else if (A[mid + 1] > A[high])
             {
                 result = Math.Max(FindPivot(A, mid + 1, high), result);
+            }
+            else
+            {
+                result = mid + 1;
             }
 
             return result;
@@ -26,13 +34,13 @@ namespace q3
             var mid = low + (high - low) / 2;
             var result = -1;
 
-            if (A[mid] == e)
+            if (low == high && A[low] == e)
             {
-                result = mid;
+                result = low;
             }
-            else if (A[mid] != e && high > low)
+            else if (high > low)
             {
-                if (e < A[mid])
+                if (e <= A[mid])
                 {
                     result = Math.Max(FindElement(A, e, low, mid), result);
                 }
@@ -47,6 +55,7 @@ namespace q3
         static void Main(string[] args)
         {
             var A = new[] { 10, 14, 16, 18, 20, 21, 1, 5 };
+            //var A = new[] { 4, 5, 5, 5, 5, 5, 1, 1, 1, 2};
             var n = A.Length;
             var low = 0;
             var high = n - 1;
@@ -54,13 +63,13 @@ namespace q3
             var e = int.Parse(Console.ReadLine());
             var startIndex = FindPivot(A, low, high);
 
-            if (A[low] <= e && A[startIndex - 1] >= e)
+            if (A[startIndex] <= e && A[high] >= e) 
+            {
+                low = startIndex; 
+            }
+            else if (A[low] <= e && A[startIndex - 1] >= e)
             {
                 high = startIndex - 1;
-            }
-            else if (A[startIndex] <= e && A[high] >= e)
-            {
-                low = startIndex;
             }
 
             var result = FindElement(A, e, low, high);
