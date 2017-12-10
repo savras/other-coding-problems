@@ -1,6 +1,7 @@
 ﻿/*
  * Assume both lists are sorted ascending and last result is also sorted ascending
- * and also that all values are distinct
+ * and also that all values are distinct.
+ * Assume arrays are contiguous (not fragmented)
  */
 
 using System;
