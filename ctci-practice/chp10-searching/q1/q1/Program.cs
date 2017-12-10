@@ -10,20 +10,6 @@ namespace q1
     class Program
     {
         const int Empty = int.MaxValue;
-        static int GetLastPointerForA(int[] A)
-        {
-            var lastIndex = A.Length - 1;
-            for (var i = lastIndex; i >= 0; i--)
-            {
-                if (A[i] != Empty)
-                {
-                    lastIndex = i;
-                    break;
-                }
-            }
-
-            return lastIndex;
-        }
 
         static void Main(string[] args)
         {
@@ -36,7 +22,7 @@ namespace q1
 
             var lastEmptyIndex = A.Length - 1;
             var bLastPtr = B.Length - 1;
-            var aLastPtr = GetLastPointerForA(A);
+            var aLastPtr = A.Length - B.Length - 1;
 
             while (aLastPtr >= 0 && bLastPtr >= 0)
             {
