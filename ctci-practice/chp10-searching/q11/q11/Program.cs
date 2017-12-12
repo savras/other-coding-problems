@@ -4,6 +4,8 @@
  * its previous number, then just push to the array.
  * Otherwise, swap the newly discovered digit with the current digit, and push the current digit into the array.
  * Assumption, no contiguous values with the same digit
+ * 
+ * Better solution that allows us to only check odd / even indices is available
  */
 
 using System;
