@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Rookie mistake. Forgot to check for root == null in PreOrder.
+
+using System.Collections.Generic;
 
 namespace q3
 {
