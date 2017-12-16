@@ -34,7 +34,7 @@ namespace q5
                     Value = 10,
                     Left = new Node
                     {
-                        Value = 10
+                        Value = 5
                     },
                     Right = new Node
                     {
@@ -61,10 +61,23 @@ namespace q5
             return root;
         }
 
+        static bool RangeCheckIsBst(Node node, int min, int max)
+        {
+            var result = true;
+            if (node != null)
+            {
+                result = (RangeCheckIsBst(node.Left, min, node.Value)) && 
+                         (node.Value >= min && node.Value <= max) && 
+                         (RangeCheckIsBst(node.Right, node.Value, max));
+            }
+            return result;
+        }
+
         static void Main(string[] args)
         {
             var btRoot = GetBinaryTree();
-            var isBst = InorderCheckIsBst(btRoot);
+            //var isBst = InorderCheckIsBst(btRoot);
+            var isBst = RangeCheckIsBst(btRoot, int.MinValue, int.MaxValue);
 
             Console.WriteLine(isBst);
         }
