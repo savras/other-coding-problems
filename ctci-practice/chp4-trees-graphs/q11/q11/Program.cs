@@ -8,20 +8,22 @@ namespace q11
     {
         static int?[] GetT1()
         {
-            return new int?[] {0, 1, 2, 3, 4, null, null, null, null, null, 10, null, null, null, null };
+            //return new int?[] {0, 1, 2, 3, 4, null, null, null, null, null, 10, null, null, null, null };
+            // Duplicate values
+            return new int?[] {0, 1, 2, 3, 4, null, 15, null, null, null, 10, null, null, null, 15};
         }
 
         // T2 is a subtree of T1
         static int?[] GetT2()
         {
-            return new int?[] { null, 1, null, 3, 4, null, null, null, null, null, 10, null, null, null, null };
+            return new int?[] {1, 3, 4, null, null, null, 10};
         }
 
         // T3 is not a subtree of T1
         // This invalidates InOrder traversal of T1
         static int?[] GetT3()
         {
-            return new int?[] { 4, 3, 10, 1, null, null, null, null, null, null, null, null, null, null, null };
+            return new int?[] {4, 3, 10, 1};
         }
 
         // T4 is not a subtree of T1
@@ -35,7 +37,13 @@ namespace q11
         // This invalidates PreOrder traversal of T1
         static int?[] GetT5()
         {
-            return new int?[] {1, 3, null, 4, null, null, null, 10, null, null, null, null, null, null, null};
+            return new int?[] {1, 3, null, 4, null, null, null, 10 };
+        }
+
+        // T6 has duplicate values
+        static int?[] GetT6()
+        {
+            return new int?[] { 15, null, 15 };
         }
 
         static void GetInOrder(int?[] t, int current, StringBuilder sb)
@@ -45,7 +53,11 @@ namespace q11
                 GetInOrder(t, (2 * current) + 1, sb);
                 if (t[current].HasValue)
                 {
-                    sb.Append(t[current] + " ");
+                    sb.Append(t[current] + " "); // spacing caters for {1, 2, 2, 2} and {1, 22, 2} .etc
+                }
+                else
+                {
+                    sb.Append("NULL ");  // cater for duplicate values
                 }
                 GetInOrder(t, (2 * current) + 2, sb);
             }
@@ -61,6 +73,10 @@ namespace q11
                 {
                     sb.Append(t[current] + " ");
                 }
+                else
+                {
+                    sb.Append("NULL ");
+                }
             }
         }
 
@@ -71,6 +87,10 @@ namespace q11
                 if (t[current].HasValue)
                 {
                     sb.Append(t[current] + " ");
+                }
+                else
+                {
+                    sb.Append("NULL ");
                 }
                 GetPreOrder(t, (2*current) + 1, sb);
                 GetPreOrder(t, (2*current) + 2, sb);
@@ -101,7 +121,7 @@ namespace q11
         static void Main(string[] args)
         { 
             var t1 = GetT1();
-            var t2 = GetT2();
+            var t2 = GetT6();
             
             var result = IsT2SubtreeOfT1(t1, t2);
 
