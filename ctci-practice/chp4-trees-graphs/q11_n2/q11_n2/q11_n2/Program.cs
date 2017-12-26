@@ -16,7 +16,11 @@ namespace q11_n2
                     },
                     Right = new Node
                     {
-                        Value = 4
+                        Value = 4,
+                        Right = new Node
+                        {
+                            Value = 10
+                        }
                     },
                     Value = 1
                 },
@@ -36,18 +40,15 @@ namespace q11_n2
             {
                 Left = new Node
                 {
-                    Left = new Node
-                    {
-                        Value = 3
-                    },
-                    Right = new Node
-                    {
-                        Value = 4
-                    },
-                    Value = 0
+                    Value = 3
                 },
                 Right = new Node
                 {
+                    Right = new Node
+                    {
+                        Value = 11
+                    },
+                    Value = 4
                 },
                 Value = 1
             };
@@ -69,7 +70,7 @@ namespace q11_n2
                 return true;
             }
 
-            if (t1Current == null || t2Current == null || t1Current != t2Current)
+            if (t1Current == null || t2Current == null || t1Current.Value != t2Current.Value)
             {
                 return false;
             }
@@ -90,7 +91,7 @@ namespace q11_n2
                 return IsT2SameAsCurrentNodeInT1(current, t2);
             }
 
-            return IsT2SubTreeOfT1(current.Left, t2) || IsT2SubTreeOfT1(current.Right, t2);
+            return IsT2SubTreeOfT1(current.Left, t2) && IsT2SubTreeOfT1(current.Right, t2);
         }
 
         static void Main(string[] args)
@@ -98,7 +99,7 @@ namespace q11_n2
             var t1 = GetT1();
             var t2 = GetT2();
 
-            var result = true;
+            bool result;
             if (t1 == null || t2 == null)
             {
                 result = false;
@@ -114,7 +115,7 @@ namespace q11_n2
             }
             else
             {
-                Console.WriteLine("T2 is not a subtree of T1");
+                Console.WriteLine("T2 is NOT a subtree of T1");
             }
         }
     }
