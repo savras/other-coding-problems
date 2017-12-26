@@ -60,7 +60,7 @@ namespace q11_n2
 
             if (t2 == null)
             {
-                return false;
+                return true;
             }
 
             if (current.Value == t2.Value && IsT2SameAsCurrentNodeInT1(current, t2))
