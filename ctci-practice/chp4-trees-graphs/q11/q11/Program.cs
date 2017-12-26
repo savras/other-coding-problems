@@ -122,8 +122,12 @@ namespace q11
         { 
             var t1 = GetT1();
             var t2 = GetT6();
-            
-            var result = IsT2SubtreeOfT1(t1, t2);
+
+            var result = false;
+            if (t1.Length > 0 || t2.Length > 0)
+            {
+                result = IsT2SubtreeOfT1(t1, t2);
+            }
 
             Console.WriteLine(result);
         }
