@@ -6,58 +6,30 @@ namespace q11_n2
     {
         public static Node GetT1()
         {
-            var root = new Node
-            {
-                Left = new Node
-                {
-                    Left = new Node
-                    {
-                        Value = 3
-                    },
-                    Right = new Node
-                    {
-                        Value = 4,
-                        Right = new Node
-                        {
-                            Value = 10
-                        }
-                    },
-                    Value = 1
-                },
-                Right = new Node
-                {
-                    Value = 2
-                },
-                Value = 0
-            };
-
+            var root = new Node(0);
+            root.Right = new Node(2);
+            root.Left = new Node(1);
+            root.Left.Left = new Node(3);
+            root.Left.Right = new Node(4);
+            root.Left.Right.Right = new Node(10);
             return root;
         }
 
         public static Node GetT2()
         {
-            var root = new Node
-            {
-                Left = new Node
-                {
-                    Value = 3
-                },
-                Right = new Node
-                {
-                    Right = new Node
-                    {
-                        Value = 11
-                    },
-                    Value = 4
-                },
-                Value = 1
-            };
-
+            var root = new Node(1);
+            root.Left = new Node(3);
+            root.Right = new Node(4);
+            root.Right.Right = new Node(10);
             return root;
         }
 
         public class Node
         {
+            public Node(int value)
+            {
+                Value = value;
+            }
             public Node Left { get; set; }
             public Node Right { get; set; }
             public int Value { get; set; }
@@ -75,7 +47,7 @@ namespace q11_n2
                 return false;
             }
 
-            return IsT2SameAsCurrentNodeInT1(t1Current.Left, t2Current.Left) ||
+            return IsT2SameAsCurrentNodeInT1(t1Current.Left, t2Current.Left) &&
                    IsT2SameAsCurrentNodeInT1(t1Current.Right, t2Current.Right);
         }
 
@@ -83,15 +55,20 @@ namespace q11_n2
         {
             if (current == null)
             {
+                return false;
+            }
+
+            if (t2 == null)
+            {
+                return false;
+            }
+
+            if (current.Value == t2.Value && IsT2SameAsCurrentNodeInT1(current, t2))
+            {
                 return true;
             }
 
-            if (current.Value == t2.Value)
-            {
-                return IsT2SameAsCurrentNodeInT1(current, t2);
-            }
-
-            return IsT2SubTreeOfT1(current.Left, t2) && IsT2SubTreeOfT1(current.Right, t2);
+            return IsT2SubTreeOfT1(current.Left, t2) || IsT2SubTreeOfT1(current.Right, t2);
         }
 
         static void Main(string[] args)
@@ -99,24 +76,8 @@ namespace q11_n2
             var t1 = GetT1();
             var t2 = GetT2();
 
-            bool result;
-            if (t1 == null || t2 == null)
-            {
-                result = false;
-            }
-            else
-            {
-                result = IsT2SubTreeOfT1(t1, t2);
-            }
-
-            if (result)
-            {
-                Console.WriteLine("T2 is subtree of T1");
-            }
-            else
-            {
-                Console.WriteLine("T2 is NOT a subtree of T1");
-            }
+            var result = IsT2SubTreeOfT1(t1, t2);
+            Console.WriteLine(result ? "T2 is subtree of T1" : "T2 is NOT a subtree of T1");
         }
     }
 }
