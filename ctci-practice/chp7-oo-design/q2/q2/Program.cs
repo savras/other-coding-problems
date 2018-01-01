@@ -46,7 +46,10 @@ namespace q2
                 }
             );
 
-            callCenter.DispatchCall();
+            while (callCenter.GetCallCount() > 0)
+            {
+                callCenter.DispatchCall();
+            }
         }
     }
 
@@ -83,36 +86,67 @@ namespace q2
             _calls.Add(call);
         }
 
+        public int GetCallCount()
+        {
+            return _calls.Count;
+        }
+
         public void DispatchCall()
         {
             var call = _calls.FirstOrDefault();
             if (call != null)
             {
-                Employee employee = _respondents.FirstOrDefault(e => !e.IsBusy);
-                if (employee == null)
-                {
-
-                    if (!_manager.IsBusy)
-                    {
-                        employee = _manager;
-                    }
-
-                    if (!_director.IsBusy)
-                    {
-                        employee = _director;
-                    }
-                }
+                var employee = GetEmployeeToAnswerCall(call);
 
                 if (employee != null)
                 {
                     employee.IsBusy = true;
                     if (employee.TakeCall(call))
                     {
-                        employee.IsBusy = false;
                         _calls.Remove(call);
                     }
+                    employee.IsBusy = false;
                 }
             }
+        }
+
+        private Employee GetEmployeeToAnswerCall(Call call)
+        {
+            Employee employee = null;
+            switch (call.Rank)
+            {
+                case CallRank.Respondent:
+                    employee = _respondents.FirstOrDefault(e => !e.IsBusy);
+                    if (employee == null)
+                    {
+                        if (!_manager.IsBusy)
+                        {
+                            employee = _manager;
+                        }
+                        else if (!_director.IsBusy)
+                        {
+                            employee = _director;
+                        }
+                    }
+                    break;
+                case CallRank.Manager:
+                    if (!_manager.IsBusy)
+                    {
+                        employee = _manager;
+                    }
+                    else if (!_director.IsBusy)
+                    {
+                        employee = _director;
+                    }
+                    break;
+                case CallRank.Director:
+                    if (!_director.IsBusy)
+                    {
+                        employee = _director;
+                    }
+                    break;
+            }
+            return employee;
         }
     }
 
