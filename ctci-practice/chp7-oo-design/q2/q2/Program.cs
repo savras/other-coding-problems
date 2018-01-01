@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace q2
 {
@@ -14,7 +13,39 @@ namespace q2
     {
         static void Main(string[] args)
         {
-            var callCenter = new CallCenter();
+            var callCenter = new CallCenter(
+                new Director
+                {
+                    EmployeeId = 1,
+                    Rank = CallRank.Director
+                },
+                new Manager
+                {
+                    EmployeeId = 2,
+                    Rank = CallRank.Manager
+                },
+                new List<Respondent>
+                {
+                    new Respondent
+                    {
+                        EmployeeId = 3,
+                        Rank = CallRank.Respondent
+                    },
+                    new Respondent
+                    {
+                        EmployeeId = 4,
+                        Rank = CallRank.Respondent
+                    }
+                });
+
+
+            callCenter.AddCall(
+                new Call
+                {
+                    Rank = CallRank.Respondent
+                }
+            );
+
             callCenter.DispatchCall();
         }
     }
@@ -39,39 +70,12 @@ namespace q2
         private readonly List<Respondent> _respondents;
         private readonly List<Call> _calls;
 
-        public CallCenter()
+        public CallCenter(Director director, Manager manager, List<Respondent> respondents)
         {
-            _director = new Director
-            {
-                EmployeeId = 1,
-                Rank = CallRank.Director
-            };
-            _manager = new Manager
-            {
-                EmployeeId = 2,
-                Rank = CallRank.Manager
-            };
-            _respondents = new List<Respondent>
-            {
-                new Respondent
-                {
-                    EmployeeId = 3,
-                    Rank = CallRank.Respondent
-                },
-                new Respondent
-                {
-                    EmployeeId = 4,
-                    Rank = CallRank.Respondent
-                }
-            };
-            _calls = new List<Call>
-            {
-                new Call
-                {
-                    Rank = CallRank.Respondent
-                }
-            };
-
+            _director = director;
+            _manager = manager;
+            _respondents = respondents;
+            _calls = new List<Call>();
         }
 
         public void AddCall(Call call)
