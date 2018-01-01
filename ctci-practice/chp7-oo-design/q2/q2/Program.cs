@@ -84,16 +84,16 @@ namespace q2
             var call = _calls.FirstOrDefault();
             if (call != null)
             {
-                Employee employee = _respondents.FirstOrDefault(e => e.CanAnswerCall);
+                Employee employee = _respondents.FirstOrDefault(e => !e.IsBusy);
                 if (employee == null)
                 {
 
-                    if (_manager.CanAnswerCall)
+                    if (!_manager.IsBusy)
                     {
                         employee = _manager;
                     }
 
-                    if (_director.CanAnswerCall)
+                    if (!_director.IsBusy)
                     {
                         employee = _director;
                     }
@@ -101,10 +101,10 @@ namespace q2
 
                 if (employee != null)
                 {
-                    employee.CanAnswerCall = false;
+                    employee.IsBusy = true;
                     if (employee.TakeCall(call))
                     {
-                        employee.CanAnswerCall = true;
+                        employee.IsBusy = false;
                         _calls.Remove(call);
                     }
                 }
@@ -122,16 +122,13 @@ namespace q2
         bool TakeCall(Call call);
     }
 
-    public class Employee : IEmployee
+    public abstract class Employee : IEmployee
     {
         public int EmployeeId { get; set; }
-        public bool CanAnswerCall { get; set; }
+        public bool IsBusy { get; set; }
         public CallRank Rank { get; set; }
 
-        public virtual bool TakeCall(Call call)
-        {
-            return false;
-        }
+        public abstract bool TakeCall(Call call);
     }
 
     public class Respondent : Employee, ICanEscalate
