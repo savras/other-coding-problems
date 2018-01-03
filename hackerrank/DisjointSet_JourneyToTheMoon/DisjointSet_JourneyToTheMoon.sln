@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisjointSet_JourneyToTheMoon", "DisjointSet_JourneyToTheMoon\DisjointSet_JourneyToTheMoon.csproj", "{6CB75AF0-744F-4C80-A09E-AB5E74E3EDE5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CB75AF0-744F-4C80-A09E-AB5E74E3EDE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CB75AF0-744F-4C80-A09E-AB5E74E3EDE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CB75AF0-744F-4C80-A09E-AB5E74E3EDE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CB75AF0-744F-4C80-A09E-AB5E74E3EDE5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
