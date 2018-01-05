@@ -1,4 +1,4 @@
-﻿// Assumption : case insensitive. Alphabets only.
+﻿// Assumption : case insensitive. Alphabets only. Otherwise use a Dictionary and check that values are 0.
 
 using System;
 
@@ -29,12 +29,8 @@ namespace q2
             {
                 var index = str1[i] - 'a';
                 arr[index]++;
-            }
-
-            for (var i = 0; i < str2.Length; i++)
-            {
-                var index = str2[i] - 'a';
-                arr[index]--;
+                var index2 = str2[i] - 'a';
+                arr[index2]--;
             }
 
             var result = true;
