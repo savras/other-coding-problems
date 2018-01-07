@@ -70,14 +70,14 @@ class Solution
 
     static int Find(int[] ds, int index)
     {
-        var parent = index;
-        while (parent != ds[parent])
+        while (index != ds[index])
         {
-            parent = ds[parent];
+            ds[index] = ds[ds[index]];
+            index = ds[index];
         }
-        ds[index] = parent;
-        return parent;
+        return ds[index];
     }
+
     static void Main(String[] args)
     {
         string[] tokens_n = Console.ReadLine().Split(' ');
