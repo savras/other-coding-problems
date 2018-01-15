@@ -1,16 +1,16 @@
 public class Solution {
     public void MoveZeroes(int[] nums) {
-        var earliestZeroPos = -1;
+        var earliestZeroPos = 0;
         for(var i = 0; i < nums.Length; i++) {
-            if(nums[i] == 0 && earliestZeroPos == -1) {
-                earliestZeroPos = i;
+            if(nums[i] == 0) {
+                continue;
             }
-            else if (nums[i] != 0 && earliestZeroPos != -1)
+            else if (nums[i] != 0 && i > earliestZeroPos)
             {
                 nums[earliestZeroPos] = nums[i];
-                earliestZeroPos++;
                 nums[i] = 0;
-            }            
+            }
+			earliestZeroPos++;		
         }        
     }
 }
