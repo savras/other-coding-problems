@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace q2
 {
@@ -14,44 +11,53 @@ namespace q2
             Console.WriteLine(result);
         }
 
-        public static double GetBinary(double num)
+        public static string GetBinary(double num)
         {
-            int deci = (int)num;
+            if (num < 0 || num > 1)
+            {
+                return "Number is not in the valid range of 0 and 1";
+            }
+
+            var deci = (int)num;
             var fraction = num - deci;
 
-            double result = 0.00; ;
-            result += GetFractionBinary(fraction);
-             result += GetDecimalBinary(deci);
+            var result = new StringBuilder();
 
-            return result;
+            result.Append(GetDecimalBinary(deci));
+            result.Append(".");
+            result.Append(GetFractionBinary(fraction));
+
+            return result.ToString();
         }
 
-        public static double GetDecimalBinary(int deci)
+        public static string GetDecimalBinary(int deci)
         {
-            var result = 0;
-            var multiplier = 1;
+            if (deci == 0)
+            {
+                return "0";
+            }
+
+            var result = new StringBuilder();
             while (deci > 0)
             {
-                result += (deci % 2) * multiplier;
+                var remainder = deci % 2;
                 deci = deci / 2;
-                multiplier *= 10;
+                result.Insert(0, remainder);
             }
-            return result;
+            return result.ToString();
         }
 
-        public static double GetFractionBinary(double fraction)
+        public static string GetFractionBinary(double fraction)
         {
-            var result = 0.00;
-            int multiplier = 10;
+            var result = new StringBuilder();
             while (fraction > 0)
             {
                 double multiplicationResult = fraction * 2;
                 double deci = (int)multiplicationResult;
                 fraction = multiplicationResult - deci;
-                result += deci / multiplier;
-                multiplier *= 10;
+                result.Append(deci);
             }
-            return result;
+            return result.ToString();
         }
     }
 }
