@@ -4,28 +4,11 @@ namespace q5
 {
     class Program
     {
-        // Primitive method
-        // Doesn't handle negative numbers.
-        static int Primitive(int val, int count)
-        {
-            if (count == 0)
-            {
-                return 0;
-            }
-            
-            return CallMultiplyWithSmallerAsFirstArgument(val, count - 1) + val;
-        }
-
-        // More optimal method
+        // O(log n) solution.
         static int CallMultiplyWithSmallerAsFirstArgument(int a, int b)
         {
-            var smaller = a;
-            var larger = b;
-            if (a > b)
-            {
-                smaller = b;
-                larger = a;
-            }
+            var smaller = a > b ? b : a;
+            var larger = a > b ? a : b;
             return Multiply(smaller, larger);
         }
 
@@ -34,16 +17,22 @@ namespace q5
             if (smaller == 0) { return 0; }
             if (smaller == 1) { return larger; }
 
-            var newSmaller = smaller >> 1;  // Half the value
-            return Multiply(newSmaller, larger) << 1;
+            var newSmaller = smaller >> 1;
+
+            var result = Multiply(newSmaller, larger);
+            if ((smaller & 1) > 0)
+            {
+                return (result << 1) + larger;
+            }
+            return result << 1;
         }
 
         static void Main(string[] args)
         {
-            var a = 4;
+            var a = -4;
             var b = 8;
 
-            var result = Multiply(a, b);
+            var result = CallMultiplyWithSmallerAsFirstArgument(a, b);
             
             Console.WriteLine(result);
         }
