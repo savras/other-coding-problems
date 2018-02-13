@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace q6
 {
@@ -7,107 +7,35 @@ namespace q6
     {
         static void Main(string[] args)
         {
-            var n = 4;
+            var n = 20;
 
             var t1 = new Stack<int>();
-            for (var i = 1; i <= 4; i++)
+            var t2 = new Stack<int>();
+            var t3 = new Stack<int>();
+            for (var i = 1; i <= n; i++)
             {
                 t1.Push(i);
             }
 
-            var stacks = new[]
-            {
-                t1, new Stack<int>(), new Stack<int>()
-            };
-
-            Solve(stacks, true, 0, n);
+            Solve(n, t1, t2, t3);
         }
 
-        private static void Solve(Stack<int>[] stacks, bool isOddTurn, int onePositionIndex, int n)
+        private static void Solve(int n, Stack<int> main, Stack<int> buffer, Stack<int> end)
         {
-            while (stacks[2].Count < n)
+            if (n == 0)
             {
-                // if isOddTurn, move 1 to the right
-                if (isOddTurn)
-                {
-                    stacks[onePositionIndex].Pop();
-                    onePositionIndex++;
-                    if (onePositionIndex > 2)
-                    {
-                        onePositionIndex = 0;
-                    }
-                    stacks[onePositionIndex].Push(1);
-                }
-                // else move smallest non-1 to the only valid position
-                else
-                {
-                    MoveSmallestNonOne(stacks, onePositionIndex);
-                }
-
-                isOddTurn = !isOddTurn;
+                return;
             }
-        }
+            Solve(n - 1, main, end, buffer);
 
-        private static void MoveSmallestNonOne(Stack<int>[] stacks, int onePositionIndex)
-        {
-            var index1 = 0;
-            var index2 = 0;
-            switch (onePositionIndex)
+            if (main.Count > 0)
             {
-                case 0:
-                {
-                    index1 = 1;
-                    index2 = 2;
-                    break;
-                }
-                case 1:
-                {
-                    index1 = 0;
-                    index2 = 2;
-                    break;
-                }
-                case 2:
-                {
-                    index1 = 0;
-                    index2 = 1;
-                    break;
-                }
+                var val = main.Peek();
+                main.Pop();
+                end.Push(val);
             }
 
-            int smallerValue;
-            int smallerStackIndex;
-            int largerStackIndex;
-            if (stacks[index1].Count == 0)
-            {
-                smallerValue = stacks[index2].Peek();
-                smallerStackIndex = index1;
-                largerStackIndex = index2;
-            }
-            else if (stacks[index2].Count == 0)
-            {
-                smallerValue = stacks[index1].Peek();
-                smallerStackIndex = index2;
-                largerStackIndex = index1;
-            }
-            else if (stacks[index1].Peek() < stacks[index2].Peek())
-            {
-                smallerValue = stacks[index1].Peek();
-                smallerStackIndex = index1;
-                largerStackIndex = index2;
-            }
-            else
-            {
-                smallerValue = stacks[index2].Peek();
-                smallerStackIndex = index2;
-                largerStackIndex = index1;
-            }
-
-
-            if (stacks[largerStackIndex].Count != 0)
-            {
-                stacks[largerStackIndex].Pop();
-            }
-            stacks[smallerStackIndex].Push(smallerValue);
+            Solve(n - 1, buffer, main , end);
         }
     }
-}
+} 
