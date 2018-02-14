@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace q8
 {
@@ -38,7 +37,7 @@ namespace q8
         static void Main(string[] args)
         {
             var hs = new HashSet<string>();
-            var str = "AAABBC";
+            var str = "ABAB";
             Permute(str.ToCharArray(), 0, hs);
         }
     }
