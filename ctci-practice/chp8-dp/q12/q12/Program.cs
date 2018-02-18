@@ -5,120 +5,56 @@ namespace q12
     class Program
     {
 
-        static bool IsValidPlacement(int[,] board, int row, int col)
+        static bool IsValidPlacement(int[] cols, int row, int col)
         {
+            // Check validy of column
+            if (cols[col] != 0) { return false; }
 
-            return IsCheckDiagonal(board, row, col) &&
-                   IsValidVertical(board, col) &&
-                   IsValidHorizontal(board, row);
+            // Given current column, col, we can find out if there's a queen in the column
+            // by checking cols[i] != 0
+            // If rowDist == colDist, then we know there is a queen diagonally.
+            // Value in cols[i] is the row of the other queens (if not 0)
+            // Index i is the column of the other queens
+            var result = true;
+            for (var i = 0; i < cols.Length; i++)
+            {
+                if (cols[i] != 0 && 
+                    Math.Abs(col - i) == (cols[i] - row))
+                {
+                    result = false;
+                }
+            }
+            return result;
         }
 
-        private static bool IsValidHorizontal(int[,] board, int row)
+        static int GetNumberOfWays(int[] cols, int row)
         {
-            var oneCount = 0;
-            for (var i = 0; i < board.GetLength(0); i++)
-            { 
-                oneCount += board[row, i];
-            }
-            return oneCount == 1;
-        }
-
-        private static bool IsValidVertical(int[,] board, int col)
-        {
-            var oneCount = 0;
-            for (var i = 0; i < board.GetLength(0); i++)
-            {
-                oneCount += board[i, col];
-            }
-            return oneCount == 1;
-        }
-
-        private static bool IsCheckDiagonal(int[,] board, int row, int col)
-        {
-            var oneCount = 0;
-            var len = board.GetLength(0) - 1;
-
-            var r = row;
-            var c = col;
-            r--;
-            c--;
-            while (r >= 0 && c >= 0)
-            {
-                oneCount += board[r--, c--];
-            }
-
-            r = row;
-            c = col;
-            r++;
-            c++;
-            while (r < len && c < len)
-            {
-                oneCount += board[r++, c++];
-            }
-
-            r = row;
-            c = col;
-            r++;
-            c--;
-            while (r < len && c >= 0)
-            {
-                oneCount += board[r++, c--];
-            }
-
-            r = row;
-            c = col;
-            r--;
-            c++;
-            while (r >= 0 && c < len)
-            {
-                oneCount += board[r--, c++];
-            }
-
-            return oneCount == 0;
-        }
-
-        static int GetNumberOfWays(int[,] board, int row, int previousCol)
-        {
-            if (row < 0) { return 1; }
+            // 1.Note that we recurse upwards towards the upper rows. 
+            // This means that the rows will always be unique
+            // 2. Note that we can have one array to check whether a column has a queen or not.
+            if (row == 0) { return 1; }  // We have made it all the way and havent found an invalid placement.
 
             var result = 0;
-            for (var col = board.GetLength(1) - 1; col >= 0; col--)
+            for (var j = 0; j < cols.Length; j++)
             {
-                board[row, col] = 1;
-
-                if (IsValidPlacement(board, row, previousCol))
+                if (IsValidPlacement(cols, row, j))
                 {
-                    result += GetNumberOfWays(board, row - 1, col);
+                    cols[j] = row;
+                    result += GetNumberOfWays(cols, row - 1);
+                    cols[j] = 0;
                 }
-
-                board[row, col] = 0;
             }
             return result;
         }
 
         static void Main(string[] args)
         {
-            var board = new[,]
-            {
-                //{0, 0, 0, 0},
-                //{0, 0, 0, 0},
-                //{0, 0, 0, 0},
-                //{0, 0, 0, 0}
-                
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-            };
+            // We store the value of the 1-based row index in cols array.
+            // We use the index of cols array as the column index
+            const int n = 8;
+            var cols = new int[n];
 
-            var startX = board.GetLength(0) - 1;
-            var startY = board.GetLength(1) - 1;
-
-            var result = GetNumberOfWays(board, startX, startY);
+            var result = GetNumberOfWays(cols, n);
             Console.WriteLine(result);
         }
     }
