@@ -3,58 +3,33 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 class Solution {
-    static void resolvePeak(int count, int peak, int i, int[] arr, long[] result) {
-        if(peak != -1) {
-            for(var j = i - 1; j > peak; j--) {
-                result[j] = count--;
-            }
-            if(result[peak + 1] >= result[peak])
-            {
-                result[peak] = result[peak + 1] + 1;
-            }
-        }        
-    }
-    
+   
     static long candies(int n, int[] arr) {
+        var offset = 1;
         var result = new long[n];
         result[0] = 1;
-        var peak = -1;
-        var count = 0;
-        for(var i = 1; i < n; i++) {            
-            if(arr[i] > arr[i - 1]) {
-                if(peak != -1) {
-                    resolvePeak(count, peak, i, arr, result);
-                    peak = -1;
-                    count = 0;
-                }
-                
-                result[i] = result[i - 1] + 1;
-            }
-            else if (arr[i] == arr[i - 1]) {
-                resolvePeak(count, peak, i, arr, result);
-                peak = -1;
-                count = 0;
-                
-                result[i] = result[i - 1] - 1;
-                if(result[i] == 0) {
-                    result[i] = 1;
-                }
-            }
-            else {
-                if(peak == -1)
-                {
-                    peak = i - 1;
-                }
-                count++;                
-            }
-            
-            if(i == n - 1){
-                resolvePeak(count, peak, i + 1, arr, result);                
-            }
+        result[n - offset] = 1;
+        
+        for(var i = 1; i < n; i++) {
+           if(arr[i] > arr[i - 1]) {
+               result[i] = result[i - 1] + 1;
+           }
+           else {
+               result[i] = 1;
+           }
+        }
+        
+        for(var i = n - 1 - offset; i >= 0; i--) {            
+           if(arr[i] > arr[i + 1]) {
+               var val = result[i + 1] + 1;
+               if(val > result[i]) {
+                   result[i] = val;
+               }
+           }
         }
         
         long ways = 0;
-        for(var i = 0; i < result.Length; i++) {
+        for(var i = 0; i < n; i++) {
             ways += result[i];
         }
         return ways;
