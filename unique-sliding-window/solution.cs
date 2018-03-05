@@ -52,7 +52,7 @@ namespace ConsoleApplication1
 
         static void Main(string[] args)
         {
-            var result = GetMinimumSlidingWindow("awaglknagawunagwkwagl", 4);
+            var result = GetMinimumSlidingWindow("aaawaghhcolumnnextein", 3);
         }
     }
 }
