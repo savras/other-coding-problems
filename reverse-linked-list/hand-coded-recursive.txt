@@ -1,0 +1,17 @@
+public static Node Reverse(Node current, Node previous)
+{
+	if(current == null) { return previous; }
+
+	var next = current.Next;
+	var root = Reverse(next, current);
+	current.next = prev;
+	return root;
+}
+
+
+// Driver
+public static void Main() 
+{
+	var root = ...;
+	var root = Reverse(root, null);
+}
