@@ -13,6 +13,7 @@
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
+[Oo]ut/
 [Rr]elease/
 [Rr]eleases/
 [Xx]64/
@@ -243,3 +244,9 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+# Intellij settings
+.idea/
+
+# Unknown
+*.iml
