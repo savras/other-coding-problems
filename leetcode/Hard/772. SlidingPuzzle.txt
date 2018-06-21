@@ -1,0 +1,18 @@
+public int GetMinimumMoves(int[,] board)
+{
+	var var possibleMoves = GetPossibleMoves(board);
+	foreach(var boardPosition in possibleMoves) 
+	{
+		// Track count
+		GetMinimumMoves(boardPosition);
+	}
+
+	return minCount;
+}
+
+public int[,] GetPossibleMoves(int[,] board)
+{
+	// Get a list of next possible moves
+	// Don't include moves that we have taken
+	// If None, return -1;
+}
