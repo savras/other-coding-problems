@@ -1,4 +1,6 @@
-﻿namespace solution
+// No idea what question this is that I'm solving. Trololol.
+
+namespace solution
 {
     class Program
     {
